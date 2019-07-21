@@ -7,3 +7,18 @@
 <a href="https://github.com/apple/swift-package-manager"><img src="https://img.shields.io/badge/SPM-compatible-4BC51D.svg?style=flat"></a>
 <a href="https://github.com/wxxsw/VideoPlayer/blob/master/LICENSE"><img src="http://img.shields.io/badge/license-MIT-lightgrey.svg?style=flat"></a>
 </p>
+
+- [Features](#features)
+- [Requirements](#requirements)
+- [Installation](#installation)
+- [Usage](#usage)
+- [FAQ](#faq)
+- [License](#license)
+
+## Features
+
+- [x] Plays local media or streams remote media over HTTP.
+- [x] Cache video data at playing.
+- [x] Customizable UI and user interaction.
+- [x] No size restrictions.
+- [x] Simple API.
