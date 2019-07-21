@@ -65,7 +65,7 @@ struct ContentView : View {
 
 ## Thanks
 
-Logo Design by [@aduqin](https://dribbble.com/aduqin)
+Banner Design by [@aduqin](https://dribbble.com/aduqin)
 
 ## License
 
