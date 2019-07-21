@@ -22,3 +22,17 @@
 - [x] Customizable UI and user interaction.
 - [x] No size restrictions.
 - [x] Simple API.
+
+## Requirements
+
+- iOS 13+
+- Xcode 11+
+- Swift 5+
+
+## Installation
+
+### Swift Package Manager
+
+1. Select `Xcode -> File -> Swift Packages -> Add Package Dependency...` 
+2. Enter `https://github.com/wxxsw/VideoPlayer`.
+3. Click `Next`, then select the version, complete.
