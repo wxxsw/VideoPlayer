@@ -12,7 +12,6 @@
 - [Requirements](#requirements)
 - [Installation](#installation)
 - [Usage](#usage)
-- [FAQ](#faq)
 - [License](#license)
 
 ## Features
@@ -22,6 +21,12 @@
 - [x] Customizable UI and user interaction.
 - [x] No size restrictions.
 - [x] Simple API.
+
+## TODO
+
+- [ ] Orientation change support.
+- [ ] Seek time support.
+- [ ] More complex demo.
 
 ## Requirements
 
@@ -36,3 +41,28 @@
 1. Select `Xcode -> File -> Swift Packages -> Add Package Dependency...` 
 2. Enter `https://github.com/wxxsw/VideoPlayer`.
 3. Click `Next`, then select the version, complete.
+
+## Usage
+
+```swift
+struct ContentView : View {
+    @State var isAutoReplay: Bool = true
+    @State var isPlay: Bool = true
+    @State var isMute: Bool = false
+    
+    let videoURL: URL
+    
+    var body: some View {
+        VideoPlayerView(url: .constant(videoURL), isPlay: $isPlay)
+            .autoReplay($isAutoReplay)
+            .mute($isMute)
+            .onPlayToEndTime { print("Play to the end time.") }
+            .onReplay { print("Replay after playing to the end.") }
+            .onStateChanged { _ in print("Playback status changes, such as from play to pause.") }
+    }
+}
+```
+
+## License
+
+VideoPlayer is released under the MIT license. [See LICENSE](https://github.com/wxxsw/VideoPlayer/blob/master/LICENSE) for details.
