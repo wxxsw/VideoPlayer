@@ -63,6 +63,10 @@ struct ContentView : View {
 }
 ```
 
+## Thanks
+
+Logo Design by [@aduqin](https://dribbble.com/aduqin)
+
 ## License
 
 VideoPlayer is released under the MIT license. [See LICENSE](https://github.com/wxxsw/VideoPlayer/blob/master/LICENSE) for details.
