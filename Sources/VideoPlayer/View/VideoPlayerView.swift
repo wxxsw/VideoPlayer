@@ -41,7 +41,7 @@ public struct VideoPlayerView: UIViewRepresentable {
         case waitingKeepUp
     }
     
-    @Binding private var url: URL
+    @Binding private(set) var url: URL
     @Binding private var isPlay: Bool
     @Binding private var isAutoReplay: Bool
     @Binding private var isMute: Bool
@@ -51,23 +51,23 @@ public struct VideoPlayerView: UIViewRepresentable {
     private var stateDidChanged: ((State) -> Void)?
     
     public init(url: Binding<URL>, isPlay: Binding<Bool>) {
-        $url = url
-        $isPlay = isPlay
-        $isAutoReplay = .constant(true)
-        $isMute = .constant(false)
+        _url = url
+        _isPlay = isPlay
+        _isAutoReplay = .constant(true)
+        _isMute = .constant(false)
     }
     
     /// Whether the video will be automatically replayed until the end of the video playback.
     public func autoReplay(_ isAutoReplay: Binding<Bool>) -> Self {
         var view = self
-        view.$isAutoReplay = isAutoReplay
+        view._isAutoReplay = isAutoReplay
         return view
     }
     
     /// Whether the video is muted, only for this instance.
     public func mute(_ isMute: Binding<Bool>) -> Self {
         var view = self
-        view.$isMute = isMute
+        view._isMute = isMute
         return view
     }
     
