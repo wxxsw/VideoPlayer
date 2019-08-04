@@ -14,7 +14,6 @@ let package = Package(
     targets: [
         .target(
             name: "VideoPlayer",
-            path: "Sources",
-            dependencies: []),
+            path: "Sources"),
     ]
 )
