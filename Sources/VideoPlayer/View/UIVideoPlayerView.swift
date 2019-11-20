@@ -15,12 +15,12 @@ public class UIVideoPlayerView: UIView {
     public let playerLayer = AVPlayerLayer()
     
     /// Get current video status.
-    public private(set) var state: VideoPlayerView.State = .none {
+    public private(set) var state: VideoPlayer.State = .none {
         didSet { stateDidChanged(state: state, previous: oldValue) }
     }
     
     /// The reason the video was paused.
-    public private(set) var pausedReason: VideoPlayerView.PausedReason = .waitingKeepUp
+    public private(set) var pausedReason: VideoPlayer.PausedReason = .waitingKeepUp
     
     /// Number of replays.
     public private(set) var replayCount: Int = 0
@@ -35,7 +35,7 @@ public class UIVideoPlayerView: UIView {
     public var replay: (() -> Void)?
     
     /// Playback status changes, such as from play to pause.
-    public var stateDidChanged: ((VideoPlayerView.State) -> Void)?
+    public var stateDidChanged: ((VideoPlayer.State) -> Void)?
     
     /// Whether the video is muted, only for this instance.
     public var isMuted: Bool {
@@ -170,7 +170,7 @@ extension UIVideoPlayerView {
     /// Pause video.
     ///
     /// - Parameter reason: Reason for pause
-    func pause(reason: VideoPlayerView.PausedReason) {
+    func pause(reason: VideoPlayer.PausedReason) {
         pausedReason = reason
         player?.pause()
     }
@@ -202,7 +202,7 @@ private extension UIVideoPlayerView {
         layer.addSublayer(playerLayer)
     }
     
-    func stateDidChanged(state: VideoPlayerView.State, previous: VideoPlayerView.State) {
+    func stateDidChanged(state: VideoPlayer.State, previous: VideoPlayer.State) {
         
         guard state != previous else {
             return
@@ -307,9 +307,9 @@ private extension UIVideoPlayerView {
     
 }
 
-extension VideoPlayerView.State: Equatable {
+extension VideoPlayer.State: Equatable {
     
-    public static func == (lhs: VideoPlayerView.State, rhs: VideoPlayerView.State) -> Bool {
+    public static func == (lhs: VideoPlayer.State, rhs: VideoPlayer.State) -> Bool {
         switch (lhs, rhs) {
         case (.none, .none):
             return true

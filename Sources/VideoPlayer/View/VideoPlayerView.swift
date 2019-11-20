@@ -9,7 +9,7 @@
 import SwiftUI
 
 @available(iOS 13, *)
-public struct VideoPlayerView: UIViewRepresentable {
+public struct VideoPlayer: UIViewRepresentable {
     
     public enum State {
         
@@ -110,23 +110,23 @@ public struct VideoPlayerView: UIViewRepresentable {
     }
     
     public class Coordinator: NSObject {
-        var playerView: VideoPlayerView
+        var videoPlayer: VideoPlayer
         
-        init(_ videoPlayerView: VideoPlayerView) {
-            self.playerView = videoPlayerView
+        init(_ videoPlayer: VideoPlayer) {
+            self.videoPlayer = videoPlayer
         }
         
         func playToEndTime() {
-            if playerView.isAutoReplay == false { playerView.isPlay = false }
-            DispatchQueue.main.async { [weak self] in self?.playerView.playToEndTime?() }
+            if videoPlayer.isAutoReplay == false { videoPlayer.isPlay = false }
+            DispatchQueue.main.async { [weak self] in self?.videoPlayer.playToEndTime?() }
         }
         
         func replay() {
-            DispatchQueue.main.async { [weak self] in self?.playerView.replay?() }
+            DispatchQueue.main.async { [weak self] in self?.videoPlayer.replay?() }
         }
         
         func stateDidChanged(_ state: State) {
-            DispatchQueue.main.async { [weak self] in self?.playerView.stateDidChanged?(state) }
+            DispatchQueue.main.async { [weak self] in self?.videoPlayer.stateDidChanged?(state) }
         }
     }
 }

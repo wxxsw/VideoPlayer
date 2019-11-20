@@ -53,7 +53,7 @@ struct ContentView : View {
     let videoURL: URL
     
     var body: some View {
-        VideoPlayerView(url: .constant(videoURL), isPlay: $isPlay)
+        VideoPlayer(url: .constant(videoURL), isPlay: $isPlay)
             .autoReplay($isAutoReplay)
             .mute($isMute)
             .onPlayToEndTime { print("Play to the end time.") }
