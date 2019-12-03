@@ -18,7 +18,7 @@ struct ContentView : View {
     
     var body: some View {
         VStack {
-            VideoPlayer(url: .constant(demoURL), isPlay: $isPlay)
+            VideoPlayer(url: demoURL, isPlay: $isPlay)
                 .autoReplay($isAutoReplay)
                 .mute($isMute)
                 .onPlayToEndTime { print("onPlayToEndTime") }
