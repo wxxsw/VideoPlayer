@@ -37,6 +37,7 @@ struct ContentView : View {
                         self.stateText = "Error: \(error)"
                     }
                 }
+                .frame(height: 300)
             
             Text(stateText)
                 .padding()
@@ -48,6 +49,8 @@ struct ContentView : View {
                 Divider().frame(height: 20)
                 Button(self.isAutoReplay ? "Auto Replay On" : "Auto Replay Off") { self.isAutoReplay.toggle() }
             }
+            
+            Spacer()
         }
     }
 }
