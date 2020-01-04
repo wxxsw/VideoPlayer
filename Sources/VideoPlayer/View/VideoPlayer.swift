@@ -44,8 +44,9 @@ public struct VideoPlayer: UIViewRepresentable {
     private(set) var url: URL
     
     @Binding private var isPlay: Bool
-    @Binding private var isAutoReplay: Bool
-    @Binding private var isMute: Bool
+    
+    private var isAutoReplay: Bool = true
+    private var isMute: Bool = true
     
     private var playToEndTime: (() -> Void)?
     private var replay: (() -> Void)?
@@ -54,21 +55,19 @@ public struct VideoPlayer: UIViewRepresentable {
     public init(url: URL, isPlay: Binding<Bool>) {
         self.url = url
         _isPlay = isPlay
-        _isAutoReplay = .constant(true)
-        _isMute = .constant(false)
     }
     
     /// Whether the video will be automatically replayed until the end of the video playback.
-    public func autoReplay(_ isAutoReplay: Binding<Bool>) -> Self {
+    public func autoReplay(_ isAutoReplay: Bool) -> Self {
         var view = self
-        view._isAutoReplay = isAutoReplay
+        view.isAutoReplay = isAutoReplay
         return view
     }
     
     /// Whether the video is muted, only for this instance.
-    public func mute(_ isMute: Binding<Bool>) -> Self {
+    public func mute(_ isMute: Bool) -> Self {
         var view = self
-        view._isMute = isMute
+        view.isMute = isMute
         return view
     }
     
