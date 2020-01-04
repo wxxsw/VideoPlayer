@@ -45,8 +45,8 @@ public struct VideoPlayer: UIViewRepresentable {
     
     @Binding private var isPlay: Bool
     
-    private var isAutoReplay: Bool = true
-    private var isMute: Bool = true
+    private var isAutoReplay: Bool = false
+    private var isMute: Bool = false
     
     private var playToEndTime: (() -> Void)?
     private var replay: (() -> Void)?
