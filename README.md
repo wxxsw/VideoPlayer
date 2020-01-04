@@ -55,8 +55,8 @@ struct ContentView : View {
     
     var body: some View {
         VideoPlayer(url: videoURL, isPlay: $isPlay)
-            .autoReplay($isAutoReplay)
-            .mute($isMute)
+            .autoReplay(isAutoReplay)
+            .mute(isMute)
             .onPlayToEndTime { print("Play to the end time.") }
             .onReplay { print("Replay after playing to the end.") }
             .onStateChanged { _ in print("Playback status changes, such as from play to pause.") }
