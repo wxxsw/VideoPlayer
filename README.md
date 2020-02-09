@@ -32,32 +32,62 @@
 2. Enter `https://github.com/wxxsw/VideoPlayer`.
 3. Click `Next`, then select the version, complete.
 
-## Requirements
+### Requirements
 
 - iOS 13+
 - Xcode 11+
 - Swift 5+
 
-## Usage
+## Quick Start
 
 ```swift
 struct ContentView : View {
-    @State var isAutoReplay: Bool = true
-    @State var isPlay: Bool = true
-    @State var isMute: Bool = false
-    
-    let videoURL: URL
+    @State private var play: Bool = true
     
     var body: some View {
-        VideoPlayer(url: videoURL, isPlay: $isPlay)
-            .autoReplay(isAutoReplay)
-            .mute(isMute)
-            .onPlayToEndTime { print("Play to the end time.") }
-            .onReplay { print("Replay after playing to the end.") }
-            .onStateChanged { _ in print("Playback status changes, such as from play to pause.") }
+        VideoPlayer(url: someVideoURL, play: $play)
     }
 }
 ```
+
+## Advance
+
+```swift
+struct ContentView : View {  
+    @State private var autoReplay: Bool = true 
+    @State private var mute: Bool = false      
+    @State private var play: Bool = true       
+    @State private var time: CMTime = .zero  
+    
+    var body: some View {
+        VideoPlayer(url: someVideoURL, play: $play, time: $time)
+            .autoReplay(autoReplay)
+            .mute(mute)
+            .onPlayToEndTime { 
+                // Play to the end time.
+            }
+            .onReplay { 
+                // Replay after playing to the end. 
+            }
+            .onStateChanged { _ in 
+                switch state {
+                case .loading:
+                    // Loading...
+                case .playing(let totalDuration):
+                    // Playing...
+                case .paused(let playProgress, let bufferProgress):
+                    // Paused...
+                case .error(let error):
+                    // Error...
+                }
+            }
+    }
+}
+```
+
+## Demo
+
+Open `VideoPlayer.xcodeproj` and run `Demo` target.
 
 ![Screenshot](https://github.com/wxxsw/VideoPlayer/blob/master/Images/screenshot.png)
 

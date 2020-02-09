@@ -5,32 +5,34 @@
 //  Created by Gesen on 2019/7/14.
 //
 
+import AVFoundation
 import SwiftUI
 import VideoPlayer
 
 private let demoURL = URL(string: "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4")!
 
 struct ContentView : View {
-    @State var isAutoReplay: Bool = true
-    @State var isMute: Bool = false
-    @State var isPlay: Bool = true
-    @State var stateText: String = ""
+    @State private var play: Bool = true
+    @State private var time: CMTime = .zero
+    @State private var autoReplay: Bool = true
+    @State private var mute: Bool = false
+    @State private var stateText: String = ""
+    @State private var totalDuration: Double = 0
     
     var body: some View {
         VStack {
-            VideoPlayer(url: demoURL, isPlay: $isPlay)
-                .autoReplay(isAutoReplay)
-                .mute(isMute)
+            VideoPlayer(url: demoURL, play: $play, time: $time)
+                .autoReplay(autoReplay)
+                .mute(mute)
                 .onPlayToEndTime { print("onPlayToEndTime") }
                 .onReplay { print("onReplay") }
                 .onStateChanged { state in
                     switch state {
-                    case .none:
-                        self.stateText = "None"
                     case .loading:
                         self.stateText = "Loading..."
-                    case .playing:
+                    case .playing(let totalDuration):
                         self.stateText = "Playing!"
+                        self.totalDuration = totalDuration
                     case .paused(let playProgress, let bufferProgress):
                         self.stateText = "Paused: play \(Int(playProgress * 100))% buffer \(Int(bufferProgress * 100))%"
                     case .error(let error):
@@ -43,15 +45,53 @@ struct ContentView : View {
                 .padding()
             
             HStack {
-                Button(self.isPlay ? "Pause" : "Play") { self.isPlay.toggle() }
+                Button(self.play ? "Pause" : "Play") {
+                    self.play.toggle()
+                }
+                
                 Divider().frame(height: 20)
-                Button(self.isMute ? "Sound Off" : "Sound On") { self.isMute.toggle() }
+                
+                Button(self.mute ? "Sound Off" : "Sound On") {
+                    self.mute.toggle()
+                }
+                
                 Divider().frame(height: 20)
-                Button(self.isAutoReplay ? "Auto Replay On" : "Auto Replay Off") { self.isAutoReplay.toggle() }
+                
+                Button(self.autoReplay ? "Auto Replay On" : "Auto Replay Off") {
+                    self.autoReplay.toggle()
+                }
+            }
+            
+            HStack {
+                Button("Backward 5s") {
+                    self.time = CMTimeMakeWithSeconds(max(0, self.time.seconds - 5), preferredTimescale: self.time.timescale)
+                }
+                
+                Divider().frame(height: 20)
+                
+                Text("\(getTimeString()) / \(getTotalDurationString())")
+                
+                Divider().frame(height: 20)
+                
+                Button("Forward 5s") {
+                    self.time = CMTimeMakeWithSeconds(min(self.totalDuration, self.time.seconds + 5), preferredTimescale: self.time.timescale)
+                }
             }
             
             Spacer()
         }
+    }
+    
+    func getTimeString() -> String {
+        let m = Int(time.seconds / 60)
+        let s = Int(time.seconds.truncatingRemainder(dividingBy: 60))
+        return String(format: "%d:%02d", arguments: [m, s])
+    }
+    
+    func getTotalDurationString() -> String {
+        let m = Int(totalDuration / 60)
+        let s = Int(totalDuration.truncatingRemainder(dividingBy: 60))
+        return String(format: "%d:%02d", arguments: [m, s])
     }
 }
 
