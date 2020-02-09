@@ -89,12 +89,19 @@ struct ContentView : View {
 
 ### Preload
 
+Set the video urls to be preload queue. Preloading will automatically cache a short segment of the beginning of the video and decide whether to start or pause the preload based on the buffering of the currently playing video.
 ```swift
 VideoPlayer.preload(urls: [URL])
 ```
 
 ### Cache
 
+Get the total size of the video cache.
+```swift
+let size = VideoPlayer.calculateCachedSize()
+```
+
+Clean up all caches.
 ```swift
 VideoPlayer.cleanAllCache()
 ```
