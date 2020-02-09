@@ -7,39 +7,11 @@
 //
 
 import SwiftUI
+import UIKit
+import GSPlayer
 
 @available(iOS 13, *)
 public struct VideoPlayer: UIViewRepresentable {
-    
-    public enum State {
-        
-        /// None
-        case none
-        
-        /// From the first load to get the first frame of the video
-        case loading
-        
-        /// Playing now
-        case playing
-        
-        /// Pause, will be called repeatedly when the buffer progress changes
-        case paused(reason: PausedReason, playProgress: Double, bufferProgress: Double)
-        
-        /// An error occurred and cannot continue playing
-        case error(NSError)
-    }
-    
-    public enum PausedReason {
-        
-        /// Pause because the player is not visible, playStateDidChanged is not called when the buffer progress changes
-        case disappear
-        
-        /// Pause triggered by user interaction, default behavior
-        case userInteraction
-        
-        /// Waiting for resource completion buffering
-        case waitingKeepUp
-    }
     
     private(set) var url: URL
     
@@ -50,7 +22,7 @@ public struct VideoPlayer: UIViewRepresentable {
     
     private var playToEndTime: (() -> Void)?
     private var replay: (() -> Void)?
-    private var stateDidChanged: ((State) -> Void)?
+    private var stateDidChanged: ((VideoPlayerView.State) -> Void)?
     
     public init(url: URL, isPlay: Binding<Bool>) {
         self.url = url
@@ -85,7 +57,7 @@ public struct VideoPlayer: UIViewRepresentable {
     }
     
     /// Playback status changes, such as from play to pause.
-    public func onStateChanged(_ handler: @escaping (State) -> Void) -> Self {
+    public func onStateChanged(_ handler: @escaping (VideoPlayerView.State) -> Void) -> Self {
         var view = self
         view.stateDidChanged = handler
         return view
@@ -125,7 +97,7 @@ public struct VideoPlayer: UIViewRepresentable {
             DispatchQueue.main.async { [weak self] in self?.videoPlayer.replay?() }
         }
         
-        func stateDidChanged(_ state: State) {
+        func stateDidChanged(_ state: VideoPlayerView.State) {
             DispatchQueue.main.async { [weak self] in self?.videoPlayer.stateDidChanged?(state) }
         }
     }

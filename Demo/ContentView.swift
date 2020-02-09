@@ -31,7 +31,7 @@ struct ContentView : View {
                         self.stateText = "Loading..."
                     case .playing:
                         self.stateText = "Playing!"
-                    case .paused(_, let playProgress, let bufferProgress):
+                    case .paused(let playProgress, let bufferProgress):
                         self.stateText = "Paused: play \(Int(playProgress * 100))% buffer \(Int(bufferProgress * 100))%"
                     case .error(let error):
                         self.stateText = "Error: \(error)"

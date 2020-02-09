@@ -9,11 +9,17 @@ let package = Package(
     products: [
         .library(
             name: "VideoPlayer",
-            targets: ["VideoPlayer"]),
+            targets: ["VideoPlayer"]
+        ),
+    ],
+    dependencies: [
+        .package(url: "https://github.com/wxxsw/GSPlayer.git", from: "0.2.7"),
     ],
     targets: [
         .target(
             name: "VideoPlayer",
-            path: "Sources"),
+            dependencies: ["GSPlayer"],
+            path: "Sources"
+        ),
     ]
 )
