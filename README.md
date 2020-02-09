@@ -86,6 +86,18 @@ struct ContentView : View {
 }
 ```
 
+### Preload
+
+```swift
+VideoPlayer.preload(urls: [URL])
+```
+
+### Cache
+
+```swift
+VideoPlayer.cleanAllCache()
+```
+
 ## Demo
 
 Open `VideoPlayer.xcodeproj` and run `Demo` target.
