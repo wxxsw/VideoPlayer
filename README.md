@@ -18,10 +18,11 @@
 
 ## Features
 
+- [x] Fully customizable UI.
 - [x] Plays local media or streams remote media over HTTP.
-- [x] Cache video data at playing.
-- [x] Customizable UI and user interaction.
-- [x] No size restrictions.
+- [x] Built-in caching mechanism to support playback while downloading.
+- [x] Can preload multiple videos at any time.
+- [x] Support seek to duration.
 - [x] Simple API.
 
 ## Installation
