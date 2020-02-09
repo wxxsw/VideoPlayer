@@ -40,6 +40,22 @@ public struct VideoPlayer: UIViewRepresentable {
     private var onReplay: (() -> Void)?
     private var onStateChanged: ((State) -> Void)?
     
+    /// Insert to preload queue, the framework determines the preload timing.
+    /// - Parameter urls: URL array
+    public static func preload(urls: [URL]) {
+        VideoPreloadManager.shared.set(waiting: urls)
+    }
+    
+    /// Clear all video caches.
+    public static func cleanAllCache() {
+        try? VideoCacheManager.cleanAllCache()
+    }
+    
+    /// Init video player instance.
+    /// - Parameters:
+    ///   - url: http/https URL
+    ///   - play: play/pause
+    ///   - time: current time
     public init(url: URL, play: Binding<Bool>, time: Binding<CMTime> = .constant(.zero)) {
         self.url = url
         _play = play
