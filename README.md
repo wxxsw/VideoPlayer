@@ -13,7 +13,8 @@
 - [Features](#features)
 - [Requirements](#requirements)
 - [Installation](#installation)
-- [Usage](#usage)
+- [QuickStart](#quick-start)
+- [Advance](#advance)
 - [License](#license)
 
 ## Features
