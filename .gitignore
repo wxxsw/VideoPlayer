@@ -1,5 +1,4 @@
 .DS_Store
 /.build
 /Packages
-/*.xcodeproj
 .swiftpm/xcode/package.xcworkspace/xcuserdata/peter.xcuserdatad/UserInterfaceState.xcuserstate
