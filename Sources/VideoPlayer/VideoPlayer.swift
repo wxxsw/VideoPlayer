@@ -40,13 +40,18 @@ public struct VideoPlayer: UIViewRepresentable {
     private var onReplay: (() -> Void)?
     private var onStateChanged: ((State) -> Void)?
     
-    /// Insert to preload queue, the framework determines the preload timing.
+    /// Set the video urls to be preload queue. Preloading will automatically cache a short segment of the beginning of the video and decide whether to start or pause the preload based on the buffering of the currently playing video.
     /// - Parameter urls: URL array
     public static func preload(urls: [URL]) {
         VideoPreloadManager.shared.set(waiting: urls)
     }
     
-    /// Clear all video caches.
+    /// Get the total size of the video cache.
+    public static func calculateCachedSize() -> UInt {
+        return VideoCacheManager.calculateCachedSize()
+    }
+    
+    /// Clean up all caches.
     public static func cleanAllCache() {
         try? VideoCacheManager.cleanAllCache()
     }
