@@ -11,7 +11,7 @@ import GSPlayer
 import SwiftUI
 
 @available(iOS 13, *)
-public struct VideoPlayer: UIViewRepresentable {
+public struct VideoPlayer {
     
     public enum State {
         
@@ -33,28 +33,7 @@ public struct VideoPlayer: UIViewRepresentable {
     @Binding private var play: Bool
     @Binding private var time: CMTime
     
-    private var autoReplay: Bool = false
-    private var mute: Bool = false
-    
-    private var onPlayToEndTime: (() -> Void)?
-    private var onReplay: (() -> Void)?
-    private var onStateChanged: ((State) -> Void)?
-    
-    /// Set the video urls to be preload queue. Preloading will automatically cache a short segment of the beginning of the video and decide whether to start or pause the preload based on the buffering of the currently playing video.
-    /// - Parameter urls: URL array
-    public static func preload(urls: [URL]) {
-        VideoPreloadManager.shared.set(waiting: urls)
-    }
-    
-    /// Get the total size of the video cache.
-    public static func calculateCachedSize() -> UInt {
-        return VideoCacheManager.calculateCachedSize()
-    }
-    
-    /// Clean up all caches.
-    public static func cleanAllCache() {
-        try? VideoCacheManager.cleanAllCache()
-    }
+    private var configuration = Configuration()
     
     /// Init video player instance.
     /// - Parameters:
@@ -66,53 +45,90 @@ public struct VideoPlayer: UIViewRepresentable {
         _play = play
         _time = time
     }
+}
+
+@available(iOS 13, *)
+public extension VideoPlayer {
+    
+    /// Set the video urls to be preload queue. Preloading will automatically cache a short segment of the beginning of the video and decide whether to start or pause the preload based on the buffering of the currently playing video.
+    /// - Parameter urls: URL array
+    static func preload(urls: [URL]) {
+        VideoPreloadManager.shared.set(waiting: urls)
+    }
+    
+    /// Get the total size of the video cache.
+    static func calculateCachedSize() -> UInt {
+        return VideoCacheManager.calculateCachedSize()
+    }
+    
+    /// Clean up all caches.
+    static func cleanAllCache() {
+        try? VideoCacheManager.cleanAllCache()
+    }
+}
+
+@available(iOS 13, *)
+public extension VideoPlayer {
+    
+    struct Configuration {
+        var autoReplay: Bool = false
+        var mute: Bool = false
+        var onPlayToEndTime: (() -> Void)?
+        var onReplay: (() -> Void)?
+        var onStateChanged: ((State) -> Void)?
+    }
     
     /// Whether the video will be automatically replayed until the end of the video playback.
-    public func autoReplay(_ value: Bool) -> Self {
+    func autoReplay(_ value: Bool) -> Self {
         var view = self
-        view.autoReplay = value
+        view.configuration.autoReplay = value
         return view
     }
     
     /// Whether the video is muted, only for this instance.
-    public func mute(_ value: Bool) -> Self {
+    func mute(_ value: Bool) -> Self {
         var view = self
-        view.mute = value
+        view.configuration.mute = value
         return view
     }
     
-    public func onPlayToEndTime(_ handler: @escaping () -> Void) -> Self {
+    func onPlayToEndTime(_ handler: @escaping () -> Void) -> Self {
         var view = self
-        view.onPlayToEndTime = handler
+        view.configuration.onPlayToEndTime = handler
         return view
     }
     
     /// Replay after playing to the end.
-    public func onReplay(_ handler: @escaping () -> Void) -> Self {
+    func onReplay(_ handler: @escaping () -> Void) -> Self {
         var view = self
-        view.onReplay = handler
+        view.configuration.onReplay = handler
         return view
     }
     
     /// Playback status changes, such as from play to pause.
-    public func onStateChanged(_ handler: @escaping (State) -> Void) -> Self {
+    func onStateChanged(_ handler: @escaping (State) -> Void) -> Self {
         var view = self
-        view.onStateChanged = handler
+        view.configuration.onStateChanged = handler
         return view
     }
+    
+}
+
+@available(iOS 13, *)
+extension VideoPlayer: UIViewRepresentable {
     
     public func makeUIView(context: Context) -> VideoPlayerView {
         let uiView = VideoPlayerView()
         
         uiView.playToEndTime = {
-            if self.autoReplay == false {
+            if self.configuration.autoReplay == false {
                 self.play = false
             }
-            DispatchQueue.main.async { self.onPlayToEndTime?() }
+            DispatchQueue.main.async { self.configuration.onPlayToEndTime?() }
         }
         
         uiView.replay = {
-            DispatchQueue.main.async { self.onReplay?() }
+            DispatchQueue.main.async { self.configuration.onReplay?() }
         }
         
         uiView.stateDidChanged = { [unowned uiView] originalState in
@@ -143,7 +159,7 @@ public struct VideoPlayer: UIViewRepresentable {
                 state = .loading
             }
             
-            DispatchQueue.main.async { self.onStateChanged?(state) }
+            DispatchQueue.main.async { self.configuration.onStateChanged?(state) }
         }
         
         return uiView
@@ -155,8 +171,8 @@ public struct VideoPlayer: UIViewRepresentable {
     
     public func updateUIView(_ uiView: VideoPlayerView, context: Context) {
         play ? uiView.play(for: url) : uiView.pause(reason: .userInteraction)
-        uiView.isMuted = mute
-        uiView.isAutoReplay = autoReplay
+        uiView.isMuted = configuration.mute
+        uiView.isAutoReplay = configuration.autoReplay
         
         if let observerTime = context.coordinator.observerTime, time != observerTime {
             uiView.seek(to: time, toleranceBefore: time, toleranceAfter: time, completion: { _ in })
@@ -172,4 +188,5 @@ public struct VideoPlayer: UIViewRepresentable {
             self.videoPlayer = videoPlayer
         }
     }
+    
 }
