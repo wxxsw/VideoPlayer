@@ -112,10 +112,6 @@ Open `VideoPlayer.xcodeproj` and run `Demo` target.
 
 ![Screenshot](https://github.com/wxxsw/VideoPlayer/blob/master/Images/screenshot.png)
 
-## Dependencies
-
-- [GSPlayer](https://github.com/wxxsw/GSPlayer)
-
 ## Thanks
 
 Banner Design by [@aduqin](https://dribbble.com/aduqin)
