@@ -11,11 +11,18 @@
 <br/>
 
 - [Features](#features)
-- [Requirements](#requirements)
-- [Installation](#installation)
 - [QuickStart](#quick-start)
-- [Advance](#advance)
+- [Advances](#advances)
+- [Installation](#installation)
+- [Requirements](#requirements)
 - [License](#license)
+
+
+## Demo
+
+Open `VideoPlayer.xcodeproj` and run `Demo` target.
+
+![Screenshot](https://github.com/wxxsw/VideoPlayer/blob/master/Images/screenshot.png)
 
 ## Features
 
@@ -38,7 +45,7 @@ struct ContentView : View {
 }
 ```
 
-## Advance
+## Advances
 
 ```swift
 struct ContentView : View {  
@@ -91,12 +98,6 @@ Clean up all caches.
 ```swift
 VideoPlayer.cleanAllCache()
 ```
-
-## Demo
-
-Open `VideoPlayer.xcodeproj` and run `Demo` target.
-
-![Screenshot](https://github.com/wxxsw/VideoPlayer/blob/master/Images/screenshot.png)
 
 ## Installation
 
