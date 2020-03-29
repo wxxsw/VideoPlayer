@@ -80,6 +80,7 @@ struct ContentView : View {
             
             Spacer()
         }
+        .onDisappear { self.play = false }
     }
     
     func getTimeString() -> String {
