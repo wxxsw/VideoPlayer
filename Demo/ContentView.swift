@@ -39,7 +39,10 @@ struct ContentView : View {
                         self.stateText = "Error: \(error)"
                     }
                 }
-                .frame(height: 300)
+                .aspectRatio(1.78, contentMode: .fit)
+                .cornerRadius(15)
+                .shadow(color: Color.black.opacity(0.7), radius: 30, x: 0, y: 2)
+                .padding()
             
             Text(stateText)
                 .padding()
