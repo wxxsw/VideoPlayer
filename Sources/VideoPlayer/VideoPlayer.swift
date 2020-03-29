@@ -141,43 +141,13 @@ extension VideoPlayer: UIViewRepresentable {
             DispatchQueue.main.async { self.configuration.onReplay?() }
         }
         
-        uiView.stateDidChanged = { [unowned uiView] originalState in
-            let state: State
+        uiView.stateDidChanged = { [unowned uiView] _ in
+            let state: State = self.getState(from: uiView)
             
-            switch originalState {
-                
-            case .playing:
-                state = .playing(totalDuration: uiView.totalDuration)
-                
-                if context.coordinator.observer != nil { break }
-                context.coordinator.observer = uiView.addPeriodicTimeObserver(forInterval: .init(seconds: 0.25, preferredTimescale: 60)) { time in
-                    self.time = time
-                    context.coordinator.observerTime = time
-                    
-                    if let onBufferChanged = self.configuration.onBufferChanged {
-                        let bufferProgress = uiView.bufferProgress
-                        
-                        if bufferProgress != context.coordinator.observerBuffer {
-                            DispatchQueue.main.async {
-                                onBufferChanged(bufferProgress)
-                            }
-                            context.coordinator.observerBuffer = bufferProgress
-                        }
-                    }
-                }
-                
-            case .paused(let p, let b):
-                state = .paused(playProgress: p, bufferProgress: b)
-                
-                if context.coordinator.observer == nil { break }
-                uiView.removeTimeObserver(context.coordinator.observer!)
-                context.coordinator.observer = nil
-                
-            case .error(let error):
-                state = .error(error)
-                
-            default:
-                state = .loading
+            if case .playing = state {
+                context.coordinator.startObserver(uiView: uiView)
+            } else {
+                context.coordinator.stopObserver(uiView: uiView)
             }
             
             DispatchQueue.main.async { self.configuration.onStateChanged?(state) }
@@ -213,6 +183,53 @@ extension VideoPlayer: UIViewRepresentable {
         init(_ videoPlayer: VideoPlayer) {
             self.videoPlayer = videoPlayer
         }
+        
+        func startObserver(uiView: VideoPlayerView) {
+            guard observer == nil else { return }
+            
+            observer = uiView.addPeriodicTimeObserver(forInterval: .init(seconds: 0.25, preferredTimescale: 60)) { [weak self, unowned uiView] time in
+                guard let `self` = self else { return }
+                
+                self.videoPlayer.time = time
+                self.observerTime = time
+                
+                self.updateBuffer(uiView: uiView)
+            }
+        }
+        
+        func stopObserver(uiView: VideoPlayerView) {
+            guard let observer = observer else { return }
+            uiView.removeTimeObserver(observer)
+            self.observer = nil
+        }
+        
+        func updateBuffer(uiView: VideoPlayerView) {
+            if let handler = videoPlayer.configuration.onBufferChanged {
+                let bufferProgress = uiView.bufferProgress
+                
+                if bufferProgress != observerBuffer {
+                    DispatchQueue.main.async {
+                        handler(bufferProgress)
+                    }
+                    observerBuffer = bufferProgress
+                }
+            }
+        }
     }
+}
+
+private extension VideoPlayer {
     
+    func getState(from uiView: VideoPlayerView) -> State {
+        switch uiView.state {
+        case .none, .loading:
+            return .loading
+        case .playing:
+            return .playing(totalDuration: uiView.totalDuration)
+        case .paused(let p, let b):
+            return .paused(playProgress: p, bufferProgress: b)
+        case .error(let error):
+            return .error(error)
+        }
+    }
 }
