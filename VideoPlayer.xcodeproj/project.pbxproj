@@ -13,6 +13,8 @@
 		1CD8F03C23EFF755008442D4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1CD8F03A23EFF755008442D4 /* LaunchScreen.storyboard */; };
 		1CD8F04423EFF7C5008442D4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CD8F04323EFF7C4008442D4 /* AppDelegate.swift */; };
 		1CD8F04623EFF81A008442D4 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1CD8F04523EFF819008442D4 /* Preview Assets.xcassets */; };
+		1CE2E6672430AF8600F1DBFC /* VideoPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "VideoPlayer::VideoPlayer::Product" /* VideoPlayer.framework */; };
+		1CE2E6682430AF8600F1DBFC /* VideoPlayer.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = "VideoPlayer::VideoPlayer::Product" /* VideoPlayer.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		OBJ_100 /* VideoFullscreenPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_65 /* VideoFullscreenPlayerView.swift */; };
 		OBJ_101 /* VideoFullscreenTransitioner.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_66 /* VideoFullscreenTransitioner.swift */; };
 		OBJ_102 /* VideoPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_67 /* VideoPlayerView.swift */; };
@@ -50,7 +52,28 @@
 			remoteGlobalIDString = "GSPlayer::GSPlayer";
 			remoteInfo = GSPlayer;
 		};
+		1CE2E6692430AF8600F1DBFC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = "VideoPlayer::VideoPlayer";
+			remoteInfo = VideoPlayer;
+		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		1CE2E66B2430AF8700F1DBFC /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				1CE2E6682430AF8600F1DBFC /* VideoPlayer.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		1CD8F02D23EFF752008442D4 /* Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Demo.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -98,6 +121,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1CE2E6672430AF8600F1DBFC /* VideoPlayer.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -155,6 +179,13 @@
 				1CD8F03A23EFF755008442D4 /* LaunchScreen.storyboard */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		1CE2E6612430AF5400F1DBFC /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		OBJ_36 /* Tests */ = {
@@ -219,6 +250,7 @@
 				OBJ_68 /* Products */,
 				OBJ_73 /* LICENSE */,
 				OBJ_74 /* README.md */,
+				1CE2E6612430AF5400F1DBFC /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -294,10 +326,12 @@
 				1CD8F02923EFF752008442D4 /* Sources */,
 				1CD8F02A23EFF752008442D4 /* Frameworks */,
 				1CD8F02B23EFF752008442D4 /* Resources */,
+				1CE2E66B2430AF8700F1DBFC /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				1CE2E66A2430AF8600F1DBFC /* PBXTargetDependency */,
 			);
 			name = Demo;
 			productName = Demo;
@@ -485,6 +519,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		1CE2E66A2430AF8600F1DBFC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = "VideoPlayer::VideoPlayer" /* VideoPlayer */;
+			targetProxy = 1CE2E6692430AF8600F1DBFC /* PBXContainerItemProxy */;
+		};
 		OBJ_139 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = "GSPlayer::GSPlayer" /* GSPlayer */;

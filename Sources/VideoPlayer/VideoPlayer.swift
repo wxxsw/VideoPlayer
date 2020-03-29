@@ -34,6 +34,7 @@ public struct VideoPlayer {
     @Binding private var time: CMTime
     
     private var configuration = Configuration()
+    private var handler = Handler()
     
     /// Init video player instance.
     /// - Parameters:
@@ -73,6 +74,9 @@ public extension VideoPlayer {
     struct Configuration {
         var autoReplay: Bool = false
         var mute: Bool = false
+    }
+    
+    struct Handler {
         var onBufferChanged: ((Double) -> Void)?
         var onPlayToEndTime: (() -> Void)?
         var onReplay: (() -> Void)?
@@ -97,28 +101,28 @@ public extension VideoPlayer {
     /// the value is between 0 and 1.
     func onBufferChanged(_ handler: @escaping (Double) -> Void) -> Self {
         var view = self
-        view.configuration.onBufferChanged = handler
+        view.handler.onBufferChanged = handler
         return view
     }
     
     /// Playing to the end.
     func onPlayToEndTime(_ handler: @escaping () -> Void) -> Self {
         var view = self
-        view.configuration.onPlayToEndTime = handler
+        view.handler.onPlayToEndTime = handler
         return view
     }
     
     /// Replay after playing to the end.
     func onReplay(_ handler: @escaping () -> Void) -> Self {
         var view = self
-        view.configuration.onReplay = handler
+        view.handler.onReplay = handler
         return view
     }
     
     /// Playback status changes, such as from play to pause.
     func onStateChanged(_ handler: @escaping (State) -> Void) -> Self {
         var view = self
-        view.configuration.onStateChanged = handler
+        view.handler.onStateChanged = handler
         return view
     }
     
@@ -134,11 +138,11 @@ extension VideoPlayer: UIViewRepresentable {
             if self.configuration.autoReplay == false {
                 self.play = false
             }
-            DispatchQueue.main.async { self.configuration.onPlayToEndTime?() }
+            DispatchQueue.main.async { self.handler.onPlayToEndTime?() }
         }
         
         uiView.replay = {
-            DispatchQueue.main.async { self.configuration.onReplay?() }
+            DispatchQueue.main.async { self.handler.onReplay?() }
         }
         
         uiView.stateDidChanged = { [unowned uiView] _ in
@@ -150,7 +154,7 @@ extension VideoPlayer: UIViewRepresentable {
                 context.coordinator.stopObserver(uiView: uiView)
             }
             
-            DispatchQueue.main.async { self.configuration.onStateChanged?(state) }
+            DispatchQueue.main.async { self.handler.onStateChanged?(state) }
         }
         
         return uiView
@@ -202,11 +206,11 @@ extension VideoPlayer: UIViewRepresentable {
             
             uiView.removeTimeObserver(observer)
             
-            observer = nil
+            self.observer = nil
         }
         
         func updateBuffer(uiView: VideoPlayerView) {
-            guard let handler = videoPlayer.configuration.onBufferChanged else { return }
+            guard let handler = videoPlayer.handler.onBufferChanged else { return }
             
             let bufferProgress = uiView.bufferProgress
                 
@@ -221,12 +225,12 @@ extension VideoPlayer: UIViewRepresentable {
 
 private extension VideoPlayerView {
     
-    func convertState() -> State {
+    func convertState() -> VideoPlayer.State {
         switch state {
         case .none, .loading:
             return .loading
         case .playing:
-            return .playing(totalDuration: uiView.totalDuration)
+            return .playing(totalDuration: totalDuration)
         case .paused(let p, let b):
             return .paused(playProgress: p, bufferProgress: b)
         case .error(let error):
