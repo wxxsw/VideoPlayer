@@ -40,8 +40,8 @@ struct ContentView : View {
                     }
                 }
                 .aspectRatio(1.78, contentMode: .fit)
-                .cornerRadius(15)
-                .shadow(color: Color.black.opacity(0.7), radius: 30, x: 0, y: 2)
+                .cornerRadius(16)
+                .shadow(color: Color.black.opacity(0.7), radius: 12, x: 0, y: 2)
                 .padding()
             
             Text(stateText)
