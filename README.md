@@ -107,7 +107,7 @@ VideoPlayer.cleanAllCache()
 2. Enter `https://github.com/wxxsw/VideoPlayer`.
 3. Click `Next`, then select the version, complete.
 
-### Requirements
+## Requirements
 
 - iOS 13+
 - Xcode 11+
