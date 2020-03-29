@@ -26,20 +26,6 @@
 - [x] Support seek to duration.
 - [x] Simple API.
 
-## Installation
-
-### Swift Package Manager
-
-1. Select `Xcode -> File -> Swift Packages -> Add Package Dependency...` 
-2. Enter `https://github.com/wxxsw/VideoPlayer`.
-3. Click `Next`, then select the version, complete.
-
-### Requirements
-
-- iOS 13+
-- Xcode 11+
-- Swift 5+
-
 ## Quick Start
 
 ```swift
@@ -111,6 +97,20 @@ VideoPlayer.cleanAllCache()
 Open `VideoPlayer.xcodeproj` and run `Demo` target.
 
 ![Screenshot](https://github.com/wxxsw/VideoPlayer/blob/master/Images/screenshot.png)
+
+## Installation
+
+### Swift Package Manager
+
+1. Select `Xcode -> File -> Swift Packages -> Add Package Dependency...` 
+2. Enter `https://github.com/wxxsw/VideoPlayer`.
+3. Click `Next`, then select the version, complete.
+
+### Requirements
+
+- iOS 13+
+- Xcode 11+
+- Swift 5+
 
 ## Thanks
 
