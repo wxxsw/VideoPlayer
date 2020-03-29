@@ -58,13 +58,16 @@ struct ContentView : View {
         VideoPlayer(url: someVideoURL, play: $play, time: $time)
             .autoReplay(autoReplay)
             .mute(mute)
+            .onBufferChanged { progress in
+                // Network loading buffer progress changed
+            }
             .onPlayToEndTime { 
                 // Play to the end time.
             }
             .onReplay { 
                 // Replay after playing to the end. 
             }
-            .onStateChanged { _ in 
+            .onStateChanged { state in 
                 switch state {
                 case .loading:
                     // Loading...

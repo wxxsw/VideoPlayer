@@ -73,6 +73,7 @@ public extension VideoPlayer {
     struct Configuration {
         var autoReplay: Bool = false
         var mute: Bool = false
+        var onBufferChanged: ((Double) -> Void)?
         var onPlayToEndTime: (() -> Void)?
         var onReplay: (() -> Void)?
         var onStateChanged: ((State) -> Void)?
@@ -92,6 +93,15 @@ public extension VideoPlayer {
         return view
     }
     
+    /// Trigger a callback when the buffer progress changes,
+    /// the value is between 0 and 1.
+    func onBufferChanged(_ handler: @escaping (Double) -> Void) -> Self {
+        var view = self
+        view.configuration.onBufferChanged = handler
+        return view
+    }
+    
+    /// Playing to the end.
     func onPlayToEndTime(_ handler: @escaping () -> Void) -> Self {
         var view = self
         view.configuration.onPlayToEndTime = handler
@@ -140,9 +150,20 @@ extension VideoPlayer: UIViewRepresentable {
                 state = .playing(totalDuration: uiView.totalDuration)
                 
                 if context.coordinator.observer != nil { break }
-                context.coordinator.observer = uiView.addPeriodicTimeObserver(forInterval: .init(seconds: 0.5, preferredTimescale: 60)) { time in
+                context.coordinator.observer = uiView.addPeriodicTimeObserver(forInterval: .init(seconds: 0.25, preferredTimescale: 60)) { time in
                     self.time = time
                     context.coordinator.observerTime = time
+                    
+                    if let onBufferChanged = self.configuration.onBufferChanged {
+                        let bufferProgress = uiView.bufferProgress
+                        
+                        if bufferProgress != context.coordinator.observerBuffer {
+                            DispatchQueue.main.async {
+                                onBufferChanged(bufferProgress)
+                            }
+                            context.coordinator.observerBuffer = bufferProgress
+                        }
+                    }
                 }
                 
             case .paused(let p, let b):
@@ -187,6 +208,7 @@ extension VideoPlayer: UIViewRepresentable {
         var videoPlayer: VideoPlayer
         var observer: Any?
         var observerTime: CMTime?
+        var observerBuffer: Double?
 
         init(_ videoPlayer: VideoPlayer) {
             self.videoPlayer = videoPlayer

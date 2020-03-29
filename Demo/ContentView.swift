@@ -24,6 +24,7 @@ struct ContentView : View {
             VideoPlayer(url: demoURL, play: $play, time: $time)
                 .autoReplay(autoReplay)
                 .mute(mute)
+                .onBufferChanged { progress in print("onBufferChanged \(progress)") }
                 .onPlayToEndTime { print("onPlayToEndTime") }
                 .onReplay { print("onReplay") }
                 .onStateChanged { state in
