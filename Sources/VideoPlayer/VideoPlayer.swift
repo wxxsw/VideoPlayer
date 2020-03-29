@@ -50,7 +50,9 @@ public struct VideoPlayer {
 @available(iOS 13, *)
 public extension VideoPlayer {
     
-    /// Set the video urls to be preload queue. Preloading will automatically cache a short segment of the beginning of the video and decide whether to start or pause the preload based on the buffering of the currently playing video.
+    /// Set the video urls to be preload queue.
+    /// Preloading will automatically cache a short segment of the beginning of the video
+    /// and decide whether to start or pause the preload based on the buffering of the currently playing video.
     /// - Parameter urls: URL array
     static func preload(urls: [URL]) {
         VideoPreloadManager.shared.set(waiting: urls)
