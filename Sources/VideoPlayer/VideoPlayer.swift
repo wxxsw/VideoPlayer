@@ -33,8 +33,7 @@ public struct VideoPlayer {
     @Binding private var play: Bool
     @Binding private var time: CMTime
     
-    private var configuration = Configuration()
-    private var handler = Handler()
+    private var config = Config()
     
     /// Init video player instance.
     /// - Parameters:
@@ -71,29 +70,31 @@ public extension VideoPlayer {
 @available(iOS 13, *)
 public extension VideoPlayer {
     
-    struct Configuration {
+    struct Config {
+        struct Handler {
+            var onBufferChanged: ((Double) -> Void)?
+            var onPlayToEndTime: (() -> Void)?
+            var onReplay: (() -> Void)?
+            var onStateChanged: ((State) -> Void)?
+        }
+        
         var autoReplay: Bool = false
         var mute: Bool = false
-    }
-    
-    struct Handler {
-        var onBufferChanged: ((Double) -> Void)?
-        var onPlayToEndTime: (() -> Void)?
-        var onReplay: (() -> Void)?
-        var onStateChanged: ((State) -> Void)?
+        
+        var handler: Handler = Handler()
     }
     
     /// Whether the video will be automatically replayed until the end of the video playback.
     func autoReplay(_ value: Bool) -> Self {
         var view = self
-        view.configuration.autoReplay = value
+        view.config.autoReplay = value
         return view
     }
     
     /// Whether the video is muted, only for this instance.
     func mute(_ value: Bool) -> Self {
         var view = self
-        view.configuration.mute = value
+        view.config.mute = value
         return view
     }
     
@@ -101,28 +102,28 @@ public extension VideoPlayer {
     /// the value is between 0 and 1.
     func onBufferChanged(_ handler: @escaping (Double) -> Void) -> Self {
         var view = self
-        view.handler.onBufferChanged = handler
+        view.config.handler.onBufferChanged = handler
         return view
     }
     
     /// Playing to the end.
     func onPlayToEndTime(_ handler: @escaping () -> Void) -> Self {
         var view = self
-        view.handler.onPlayToEndTime = handler
+        view.config.handler.onPlayToEndTime = handler
         return view
     }
     
     /// Replay after playing to the end.
     func onReplay(_ handler: @escaping () -> Void) -> Self {
         var view = self
-        view.handler.onReplay = handler
+        view.config.handler.onReplay = handler
         return view
     }
     
     /// Playback status changes, such as from play to pause.
     func onStateChanged(_ handler: @escaping (State) -> Void) -> Self {
         var view = self
-        view.handler.onStateChanged = handler
+        view.config.handler.onStateChanged = handler
         return view
     }
     
@@ -135,14 +136,14 @@ extension VideoPlayer: UIViewRepresentable {
         let uiView = VideoPlayerView()
         
         uiView.playToEndTime = {
-            if self.configuration.autoReplay == false {
+            if self.config.autoReplay == false {
                 self.play = false
             }
-            DispatchQueue.main.async { self.handler.onPlayToEndTime?() }
+            DispatchQueue.main.async { self.config.handler.onPlayToEndTime?() }
         }
         
         uiView.replay = {
-            DispatchQueue.main.async { self.handler.onReplay?() }
+            DispatchQueue.main.async { self.config.handler.onReplay?() }
         }
         
         uiView.stateDidChanged = { [unowned uiView] _ in
@@ -154,7 +155,7 @@ extension VideoPlayer: UIViewRepresentable {
                 context.coordinator.stopObserver(uiView: uiView)
             }
             
-            DispatchQueue.main.async { self.handler.onStateChanged?(state) }
+            DispatchQueue.main.async { self.config.handler.onStateChanged?(state) }
         }
         
         return uiView
@@ -166,8 +167,8 @@ extension VideoPlayer: UIViewRepresentable {
     
     public func updateUIView(_ uiView: VideoPlayerView, context: Context) {
         play ? uiView.play(for: url) : uiView.pause(reason: .userInteraction)
-        uiView.isMuted = configuration.mute
-        uiView.isAutoReplay = configuration.autoReplay
+        uiView.isMuted = config.mute
+        uiView.isAutoReplay = config.autoReplay
         
         if let observerTime = context.coordinator.observerTime, time != observerTime {
             uiView.seek(to: time, toleranceBefore: time, toleranceAfter: time, completion: { _ in })
@@ -210,7 +211,7 @@ extension VideoPlayer: UIViewRepresentable {
         }
         
         func updateBuffer(uiView: VideoPlayerView) {
-            guard let handler = videoPlayer.handler.onBufferChanged else { return }
+            guard let handler = videoPlayer.config.handler.onBufferChanged else { return }
             
             let bufferProgress = uiView.bufferProgress
                 
