@@ -142,7 +142,7 @@ extension VideoPlayer: UIViewRepresentable {
         }
         
         uiView.stateDidChanged = { [unowned uiView] _ in
-            let state: State = self.getState(from: uiView)
+            let state: State = uiView.convertState()
             
             if case .playing = state {
                 context.coordinator.startObserver(uiView: uiView)
@@ -199,29 +199,30 @@ extension VideoPlayer: UIViewRepresentable {
         
         func stopObserver(uiView: VideoPlayerView) {
             guard let observer = observer else { return }
+            
             uiView.removeTimeObserver(observer)
-            self.observer = nil
+            
+            observer = nil
         }
         
         func updateBuffer(uiView: VideoPlayerView) {
-            if let handler = videoPlayer.configuration.onBufferChanged {
-                let bufferProgress = uiView.bufferProgress
+            guard let handler = videoPlayer.configuration.onBufferChanged else { return }
+            
+            let bufferProgress = uiView.bufferProgress
                 
-                if bufferProgress != observerBuffer {
-                    DispatchQueue.main.async {
-                        handler(bufferProgress)
-                    }
-                    observerBuffer = bufferProgress
-                }
-            }
+            guard bufferProgress != observerBuffer else { return }
+            
+            DispatchQueue.main.async { handler(bufferProgress) }
+            
+            observerBuffer = bufferProgress
         }
     }
 }
 
-private extension VideoPlayer {
+private extension VideoPlayerView {
     
-    func getState(from uiView: VideoPlayerView) -> State {
-        switch uiView.state {
+    func convertState() -> State {
+        switch state {
         case .none, .loading:
             return .loading
         case .playing:
