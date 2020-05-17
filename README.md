@@ -23,7 +23,7 @@
 ![Screenshot](https://github.com/wxxsw/VideoPlayer/blob/master/Images/screenshot.png)
 
 1. Clone or download the project.
-2. In the terminal, run `swift package resolve`
+2. In the terminal, run `swift package resolve`.
 3. Open `VideoPlayer.xcodeproj` and run `Demo` target.
 
 ## Features
