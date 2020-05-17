@@ -50,6 +50,12 @@ public struct VideoPlayer {
 @available(iOS 13, *)
 public extension VideoPlayer {
     
+    /// Set the preload size, the default value is 1024 * 1024, unit is byte.
+    static var preloadByteCount: Int {
+        get { VideoPreloadManager.shared.preloadByteCount }
+        set { VideoPreloadManager.shared.preloadByteCount = newValue }
+    }
+    
     /// Set the video urls to be preload queue.
     /// Preloading will automatically cache a short segment of the beginning of the video
     /// and decide whether to start or pause the preload based on the buffering of the currently playing video.
