@@ -90,6 +90,11 @@ Set the video urls to be preload queue. Preloading will automatically cache a sh
 VideoPlayer.preload(urls: [URL])
 ```
 
+Set the preload size, the default value is 1024 * 1024, unit is byte.
+```swift
+VideoPlayer.preloadByteCount = 1024 * 1024 // = 1M
+```
+
 ### Cache
 
 Get the total size of the video cache.
