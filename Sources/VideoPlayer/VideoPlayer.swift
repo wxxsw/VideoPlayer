@@ -174,6 +174,11 @@ extension VideoPlayer: UIViewRepresentable {
     }
     
     public func updateUIView(_ uiView: VideoPlayerView, context: Context) {
+        if context.coordinator.observingURL != url {
+            context.coordinator.clean()
+            context.coordinator.observingURL = url
+        }
+        
         play ? uiView.play(for: url) : uiView.pause(reason: .userInteraction)
         uiView.isMuted = config.mute
         uiView.isAutoReplay = config.autoReplay
@@ -189,6 +194,7 @@ extension VideoPlayer: UIViewRepresentable {
     
     public class Coordinator: NSObject {
         var videoPlayer: VideoPlayer
+        var observingURL: URL?
         var observer: Any?
         var observerTime: CMTime?
         var observerBuffer: Double?
@@ -216,6 +222,13 @@ extension VideoPlayer: UIViewRepresentable {
             uiView.removeTimeObserver(observer)
             
             self.observer = nil
+        }
+        
+        func clean() {
+            self.observingURL = nil
+            self.observer = nil
+            self.observerTime = nil
+            self.observerBuffer = nil
         }
         
         func updateBuffer(uiView: VideoPlayerView) {

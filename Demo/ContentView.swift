@@ -9,9 +9,18 @@ import AVFoundation
 import SwiftUI
 import VideoPlayer
 
-private let demoURL = URL(string: "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4")!
+private var videoURLs: [URL] = [
+    URL(string: "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4")!,
+    URL(string: "http://vfx.mtime.cn/Video/2019/06/29/mp4/190629004821240734.mp4")!,
+    URL(string: "http://vfx.mtime.cn/Video/2019/06/27/mp4/190627231412433967.mp4")!,
+    URL(string: "http://vfx.mtime.cn/Video/2019/06/25/mp4/190625091024931282.mp4")!,
+    URL(string: "http://vfx.mtime.cn/Video/2019/06/16/mp4/190616155507259516.mp4")!,
+    URL(string: "http://vfx.mtime.cn/Video/2019/06/15/mp4/190615103827358781.mp4")!,
+    URL(string: "http://vfx.mtime.cn/Video/2019/06/05/mp4/190605101703931259.mp4")!,
+]
 
 struct ContentView : View {
+    @State var index = 0
     @State private var play: Bool = true
     @State private var time: CMTime = .zero
     @State private var autoReplay: Bool = true
@@ -21,7 +30,7 @@ struct ContentView : View {
     
     var body: some View {
         VStack {
-            VideoPlayer(url: demoURL, play: $play, time: $time)
+            VideoPlayer(url: videoURLs[index % videoURLs.count], play: $play, time: $time)
                 .autoReplay(autoReplay)
                 .mute(mute)
                 .onBufferChanged { progress in print("onBufferChanged \(progress)") }
@@ -81,6 +90,8 @@ struct ContentView : View {
                     self.time = CMTimeMakeWithSeconds(min(self.totalDuration, self.time.seconds + 5), preferredTimescale: self.time.timescale)
                 }
             }
+            
+            Button("Next Video") { self.index += 1 }
             
             Spacer()
         }
