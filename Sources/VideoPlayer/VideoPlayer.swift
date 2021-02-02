@@ -88,6 +88,7 @@ public extension VideoPlayer {
         
         var autoReplay: Bool = false
         var mute: Bool = false
+        var contentMode: UIView.ContentMode = .scaleToFill
         
         var handler: Handler = Handler()
     }
@@ -103,6 +104,14 @@ public extension VideoPlayer {
     func mute(_ value: Bool) -> Self {
         var view = self
         view.config.mute = value
+        return view
+    }
+    
+    /// A string defining how the video is displayed within an AVPlayerLayer bounds rect.
+    /// scaleAspectFill -> resizeAspectFill, scaleAspectFit -> resizeAspect, other -> resize
+    func contentMode(_ value: UIView.ContentMode) -> Self {
+        var view = self
+        view.config.contentMode = value
         return view
     }
     
@@ -149,6 +158,8 @@ extension VideoPlayer: UIViewRepresentable {
             }
             DispatchQueue.main.async { self.config.handler.onPlayToEndTime?() }
         }
+        
+        uiView.contentMode = config.contentMode
         
         uiView.replay = {
             DispatchQueue.main.async { self.config.handler.onReplay?() }
