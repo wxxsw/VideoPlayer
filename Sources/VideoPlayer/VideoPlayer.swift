@@ -64,6 +64,11 @@ public extension VideoPlayer {
         VideoPreloadManager.shared.set(waiting: urls)
     }
     
+    /// Set custom http header, such as token.
+    static func customHTTPHeaderFields(_ fields: [String: String]) {
+        VideoLoadManager.shared.customHTTPHeaderFields = fields
+    }
+    
     /// Get the total size of the video cache.
     static func calculateCachedSize() -> UInt {
         return VideoCacheManager.calculateCachedSize()
