@@ -65,8 +65,8 @@ public extension VideoPlayer {
     }
     
     /// Set custom http header, such as token.
-    static func customHTTPHeaderFields(_ fields: [String: String]) {
-        VideoLoadManager.shared.customHTTPHeaderFields = fields
+    static func customHTTPHeaderFields(transform: @escaping (URL) -> [String: String]?) {
+        VideoLoadManager.shared.customHTTPHeaderFields = transform
     }
     
     /// Get the total size of the video cache.
