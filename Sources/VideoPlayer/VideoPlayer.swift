@@ -191,7 +191,9 @@ extension VideoPlayer: UIViewRepresentable {
     
     public func updateUIView(_ uiView: VideoPlayerView, context: Context) {
         if context.coordinator.observingURL != url {
-            context.coordinator.clean()
+            context.coordinator.stopObserver(uiView: uiView)
+            context.coordinator.observerTime = nil
+            context.coordinator.observerBuffer = nil
             context.coordinator.observingURL = url
         }
         
@@ -238,13 +240,6 @@ extension VideoPlayer: UIViewRepresentable {
             uiView.removeTimeObserver(observer)
             
             self.observer = nil
-        }
-        
-        func clean() {
-            self.observingURL = nil
-            self.observer = nil
-            self.observerTime = nil
-            self.observerBuffer = nil
         }
         
         func updateBuffer(uiView: VideoPlayerView) {
