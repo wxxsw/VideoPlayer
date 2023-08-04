@@ -216,6 +216,7 @@ extension VideoPlayer: UIViewRepresentable {
         var observer: Any?
         var observerTime: CMTime?
         var observerBuffer: Double?
+        var hasLoaded = false
 
         init(_ videoPlayer: VideoPlayer) {
             self.videoPlayer = videoPlayer
@@ -223,6 +224,13 @@ extension VideoPlayer: UIViewRepresentable {
         
         func startObserver(uiView: VideoPlayerView) {
             guard observer == nil else { return }
+            
+            if !hasLoaded {
+                hasLoaded = true
+                
+                let startTime = videoPlayer.time
+                uiView.seek(to: startTime, toleranceBefore: startTime, toleranceAfter: startTime) { _ in }
+            }
             
             observer = uiView.addPeriodicTimeObserver(forInterval: .init(seconds: 0.25, preferredTimescale: 60)) { [weak self, unowned uiView] time in
                 guard let `self` = self else { return }
