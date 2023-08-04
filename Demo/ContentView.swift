@@ -27,12 +27,14 @@ struct ContentView : View {
     @State private var mute: Bool = false
     @State private var stateText: String = ""
     @State private var totalDuration: Double = 0
+    @State private var speedRate: Float = 1.2
     
     var body: some View {
         VStack {
             VideoPlayer(url: videoURLs[index % videoURLs.count], play: $play, time: $time)
                 .autoReplay(autoReplay)
                 .mute(mute)
+                .speedRate(speedRate)
                 .onBufferChanged { progress in print("onBufferChanged \(progress)") }
                 .onPlayToEndTime { print("onPlayToEndTime") }
                 .onReplay { print("onReplay") }
