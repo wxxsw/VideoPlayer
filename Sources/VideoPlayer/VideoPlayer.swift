@@ -93,6 +93,7 @@ public extension VideoPlayer {
         
         var autoReplay: Bool = false
         var mute: Bool = false
+        var speedRate: Float = 1.0
         var contentMode: UIView.ContentMode = .scaleToFill
         
         var handler: Handler = Handler()
@@ -109,6 +110,13 @@ public extension VideoPlayer {
     func mute(_ value: Bool) -> Self {
         var view = self
         view.config.mute = value
+        return view
+    }
+
+    /// Set the playing speed of video
+    func speedRate(_ value: Float) -> Self {
+        var view = self
+        view.config.speedRate = value
         return view
     }
     
@@ -200,6 +208,7 @@ extension VideoPlayer: UIViewRepresentable {
         play ? uiView.play(for: url) : uiView.pause(reason: .userInteraction)
         uiView.isMuted = config.mute
         uiView.isAutoReplay = config.autoReplay
+        uiView.speedRate = config.speedRate
         
         if let observerTime = context.coordinator.observerTime, time != observerTime {
             uiView.seek(to: time, toleranceBefore: time, toleranceAfter: time, completion: { _ in })
