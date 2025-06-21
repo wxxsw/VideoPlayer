@@ -1,0 +1,15 @@
+{
+  "originHash" : "5f80d628f4357f9aed5de5fb9889b577afdba1894448e8d786f34044e78679ff",
+  "pins" : [
+    {
+      "identity" : "gsplayer",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/wxxsw/GSPlayer",
+      "state" : {
+        "revision" : "bdd5da716d665a398ec09706df39252cf55ef492",
+        "version" : "0.2.28"
+      }
+    }
+  ],
+  "version" : 3
+}
