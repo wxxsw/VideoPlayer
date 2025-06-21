@@ -642,7 +642,7 @@
 			repositoryURL = "https://github.com/wxxsw/GSPlayer";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 0.2.28;
+				minimumVersion = 0.2.29;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
