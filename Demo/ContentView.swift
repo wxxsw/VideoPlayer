@@ -10,7 +10,6 @@ import SwiftUI
 import VideoPlayer
 
 private var videoURLs: [URL] = [
-    URL(string: "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4")!,
     URL(string: "http://vfx.mtime.cn/Video/2019/06/29/mp4/190629004821240734.mp4")!,
     URL(string: "http://vfx.mtime.cn/Video/2019/06/27/mp4/190627231412433967.mp4")!,
     URL(string: "http://vfx.mtime.cn/Video/2019/06/25/mp4/190625091024931282.mp4")!,
